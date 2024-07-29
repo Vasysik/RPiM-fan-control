@@ -1,0 +1,14 @@
+[Unit]
+Description=Fan Control Service
+After=network.target
+
+[Service]
+WorkingDirectory= /opt/RPiModules/modules/fan_control/
+ExecStart=python3 /opt/RPiModules/modules/fan_control/fan_control.py
+Restart=always
+RestartSec=10
+User=vasys
+Group=vasys
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+{
+    "influxdb_config_path": "/opt/RPiModules/web/influxdb_config.json",
+    "influxdb_org": "",
+    "influxdb_bucket": ""
+}
