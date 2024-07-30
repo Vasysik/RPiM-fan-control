@@ -15,9 +15,9 @@ RPiM-fan-control is a module for [RPiModules](https://github.com/Vasysik/RPiModu
 2. Open the `modules.json` file located in your RPiModules directory and add the following configuration for the fan_control module:
 
    ```json
-   "RPiM-fan-control": {
+   "fan_control": {
        "route": "fan_control",
-       "icon": "RPiM-fan-control/static/fan_control_icon.png",
+       "icon": "fan_control/static/fan_control_icon.png",
        "name": "Fan Control",
        "enable": true
    }
