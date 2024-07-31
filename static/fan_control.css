@@ -22,6 +22,67 @@
     box-shadow: 0 2px 4px var(--shadow-color);
 }
 
+.top-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20;
+}
+
+.status-section {
+    flex: 1.75;
+    margin-right: 10px;
+}
+
+.settings-section {
+    flex: 1.25;
+    margin-left: 10px;
+}
+
+@media (min-width: 960px) {
+    .top-section {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .status-content {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .status-info {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 959px) {
+    .status-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .status-info {
+        width: 100%;
+        margin-left: 0;
+    }    
+
+    .fan-image-container {
+        margin-bottom: 20px;
+        width: 120px; 
+        height: 120px; 
+    }
+
+    .status-section {
+        flex: 1;
+        margin-right: 0px;
+    }
+    
+    .settings-section {
+        flex: 1;
+        margin-left: 0px;
+    }
+}
+
 input[type="number"], select {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
@@ -42,7 +103,62 @@ input[type="number"], select {
 }
 
 #fan-image {
-    width: 100px;
+    width: 100%;
     height: auto;
     transition: transform 0.3s linear;
+}
+
+.fan-image-container {
+    flex: 0 0 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-title {
+    color: var(--accent-color);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 15px;
+    width: 100%;
+}
+
+.status-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.status-info {
+    flex: 1;
+    margin-left: 30px;
+}
+
+.status-item {
+    margin-bottom: 10px;
+}
+
+.status-label {
+    font-weight: bold;
+    color: var(--accent-color);
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.status-value {
+    font-size: 16px;
+    padding: 8px 15px;
+    background-color: var(--bg-secondary);
+    border-radius: 20px;
+    display: inline-block;
+    margin-right: 10px;
 }

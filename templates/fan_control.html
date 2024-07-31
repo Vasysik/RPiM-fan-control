@@ -15,37 +15,52 @@
     {% block content %}
     <div class="fan-control-container">
         <h1>Fan Control</h1>
-
-        <div class="status-section">
-            <h2>Current Status</h2>
-            <div class="fan-image-container">
-                <img src="{{ url_for('fan_control.static', filename='fan.png') }}" alt="Fan Image" id="fan-image">
+        
+        <div class="top-section">
+            <div class="status-section">
+                <h2 class="section-title">Current Status</h2>
+                <div class="status-content">
+                    <div class="fan-image-container">
+                        <img src="{{ url_for('fan_control.static', filename='fan.png') }}" alt="Fan Image" id="fan-image">
+                    </div>
+                    <div class="status-info">
+                        <div class="status-item">
+                            <span class="status-label">Temperature: </span>
+                            <span id="current-temperature" class="status-value">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Fan State: </span>
+                            <span id="fan-state" class="status-value">Loading...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">RPM: </span>
+                            <span id="rpm" class="status-value">Loading...</span>
+                        </div>
+                    </div>    
+                </div>
             </div>
-            <p>Temperature: <span id="current-temperature">Loading...</span></p>
-            <p>Fan State: <span id="fan-state">Loading...</span></p>
-            <p>RPM: <span id="rpm">Loading...</span></p>
-        </div>
 
-        <div class="settings-section">
-            <h2>Settings</h2>
-            <label for="tempOn">Temperature On:</label>
-            <input type="number" id="tempOn" name="tempOn"><br><br>
-            
-            <label for="tempOff">Temperature Off:</label>
-            <input type="number" id="tempOff" name="tempOff"><br><br>
-            
-            <label for="mode">Mode:</label>
-            <select id="mode" name="mode">
-                <option value="smart">Smart</option>
-                <option value="normal">Normal</option>
-                <option value="default">Default</option>
-            </select><br><br>
-            
-            <button onclick="saveSettings()">Save Settings</button>
+            <div class="settings-section">
+                <h2 class="section-title">Settings</h2>
+                <label for="tempOn">Temperature On:</label>
+                <input type="number" id="tempOn" name="tempOn"><br><br>
+                
+                <label for="tempOff">Temperature Off:</label>
+                <input type="number" id="tempOff" name="tempOff"><br><br>
+                
+                <label for="mode">Mode:</label>
+                <select id="mode" name="mode">
+                    <option value="smart">Smart</option>
+                    <option value="normal">Normal</option>
+                    <option value="default">Default</option>
+                </select><br><br>
+                
+                <button onclick="saveSettings()">Save Settings</button>
+            </div>
         </div>
 
         <div class="graph-section">
-            <h2>Graph</h2>
+            <h2 class="section-title">Graph</h2>
             <select id="graph-type" onchange="updateGraph()">
                 <option value="temperature">Temperature</option>
                 <option value="rpm">RPM</option>
