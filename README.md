@@ -38,6 +38,8 @@ RPiM-fan-control is a module for [RPiModules](https://github.com/Vasysik/RPiModu
 
 Once the installation and configuration are complete, you can access the fan_control module through your [RPiModules](https://github.com/Vasysik/RPiModules) web interface. You can set the temperature thresholds for turning the fan on and off in the web interface.
 
+For detailed instructions on how to connect the fan, please refer to the [simple-rpi-fan](https://github.com/Vasysik/simple-rpi-fan) project.
+
 ## Contributing
 
 Contributions to the RPiM-fan-control module are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue on the GitHub repository. Pull requests are also encouraged.
