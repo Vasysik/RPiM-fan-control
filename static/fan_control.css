@@ -22,24 +22,39 @@
     box-shadow: 0 2px 4px var(--shadow-color);
 }
 
-.top-section {
+.top-section, .graph-param {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20;
+    margin-bottom: 10px;
 }
 
 .status-section {
-    flex: 1.75;
+    flex: 1.8;
     margin-right: 10px;
 }
 
 .settings-section {
-    flex: 1.25;
+    flex: 1.2;
+    margin-left: 10px;
+}
+
+.status-info {
+    width: 100%;
+    margin-left: 0;
+}
+
+.graph-type {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.time-range {
+    flex: 1;
     margin-left: 10px;
 }
 
 @media (min-width: 960px) {
-    .top-section {
+    .top-section, .graph-param {
         flex-direction: row;
         justify-content: space-between;
     }
@@ -48,23 +63,13 @@
         flex-direction: row;
         align-items: flex-start;
     }
-
-    .status-info {
-        width: 100%;
-        margin-left: 0;
-    }
 }
 
 @media (max-width: 959px) {
     .status-content {
         flex-direction: column;
         align-items: center;
-    }
-
-    .status-info {
-        width: 100%;
-        margin-left: 0;
-    }    
+    }   
 
     .fan-image-container {
         margin-bottom: 20px;
@@ -72,34 +77,46 @@
         height: 120px; 
     }
 
-    .status-section {
+    .status-section, .graph-type {
         flex: 1;
+        margin-bottom: 10px;
         margin-right: 0px;
     }
     
-    .settings-section {
+    .settings-section, .time-range {
         flex: 1;
         margin-left: 0px;
     }
 }
 
 input[type="number"], select {
-    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
     color: var(--text-primary);
     padding: 8px;
+}
+
+input[type="number"] {
+    width: 6ch;
+}
+
+button, .graph-type, .time-range {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+button {
     width: 100%;
-    max-width: 200px;
+    margin: 8px 0;
 }
 
 #graph {
     width: 100%;
     height: 400px;
-}
-
-#graph-type {
-    margin-bottom: 10px;
 }
 
 #fan-image {
@@ -157,6 +174,7 @@ input[type="number"], select {
 .status-value {
     font-size: 16px;
     padding: 8px 15px;
+    border: 1px solid var(--border-color);
     background-color: var(--bg-secondary);
     border-radius: 20px;
     display: inline-block;

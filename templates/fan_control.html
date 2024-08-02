@@ -42,18 +42,23 @@
 
             <div class="settings-section">
                 <h2 class="section-title">Settings</h2>
-                <label for="tempOn">Temperature On:</label>
-                <input type="number" id="tempOn" name="tempOn"><br><br>
                 
-                <label for="tempOff">Temperature Off:</label>
-                <input type="number" id="tempOff" name="tempOff"><br><br>
-                
-                <label for="mode">Mode:</label>
-                <select id="mode" name="mode">
-                    <option value="smart">Smart</option>
-                    <option value="normal">Normal</option>
-                    <option value="default">Default</option>
-                </select><br><br>
+                <div class="status-item">
+                    <span class="status-label" for="tempOn">Temperature On:</span>
+                    <input class="status-value" type="number" id="tempOn" name="tempOn">
+                </div>
+                <div class="status-item">
+                    <span class="status-label" for="tempOff">Temperature Off:</span>
+                    <input class="status-value" type="number" id="tempOff" name="tempOff">
+                </div>
+                <div class="status-item">
+                    <span class="status-label" for="mode">Mode:</span>
+                    <select class="status-value" id="mode" name="mode">
+                        <option value="smart">Smart</option>
+                        <option value="normal">Normal</option>
+                        <option value="default">Default</option>
+                    </select>
+                </div>
                 
                 <button onclick="saveSettings()">Save Settings</button>
             </div>
@@ -61,20 +66,22 @@
 
         <div class="graph-section">
             <h2 class="section-title">Graph</h2>
-            <select id="graph-type" onchange="updateGraph()">
-                <option value="temperature">Temperature</option>
-                <option value="rpm">RPM</option>
-            </select>
-            <select id="time-range" onchange="updateGraph()">
-                <option value="60">1 minute</option>
-                <option value="300">5 minutes</option>
-                <option value="900">15 minutes</option>
-                <option value="1800">30 minutes</option>
-                <option value="3600">1 hour</option>
-                <option value="21600">6 hours</option>
-                <option value="43200">12 hours</option>
-                <option value="86400">1 day</option>
-            </select>
+            <div class="graph-param">
+                <select class="graph-type" id="graph-type" onchange="updateGraph()">
+                    <option value="temperature">Temperature</option>
+                    <option value="rpm">RPM</option>
+                </select>
+                <select class="time-range" id="time-range" onchange="updateGraph()">
+                    <option value="60">1 minute</option>
+                    <option value="300">5 minutes</option>
+                    <option value="900">15 minutes</option>
+                    <option value="1800">30 minutes</option>
+                    <option value="3600">1 hour</option>
+                    <option value="21600">6 hours</option>
+                    <option value="43200">12 hours</option>
+                    <option value="86400">1 day</option>
+                </select>
+            </div>
             <div class="graph" id="graph"></div>
         </div>
     </div>
