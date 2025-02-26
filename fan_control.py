@@ -27,13 +27,14 @@ def update_lcd_cell(lcd, row, col, text):
     lcd.cursor_pos = (row, col)
     lcd.write_string(text)
 
-def set_backlight_by_time():
-    current_hour = datetime.now().hour
-    
-    if 7 <= current_hour < 22:
-        lcd.backlight_enabled = True
-    else:
-        lcd.backlight_enabled = False
+def set_backlight_by_time(time_1, time_2, mode):
+    time_1 = datetime.strptime(time_1, "%H:%M").time()
+    time_2 = datetime.strptime(time_2, "%H:%M").time()
+    now = datetime.now().time()
+    if mode == "day": lcd.backlight_enabled = time_1 <= now < time_2
+    elif mode == "night": lcd.backlight_enabled = not (time_1 <= now < time_2)
+    elif mode == "on": lcd.backlight_enabled = True
+    elif mode == "off": lcd.backlight_enabled = False
 
 config = read_json("config.json")
 influxdb_config = read_json(config['influxdb_config_path'])
@@ -59,8 +60,8 @@ except:
 
 try:
     settings = read_json("settings.json")
-    tempOn = int(settings['tempOn'])
-    tempOff = int(settings['tempOff'])
+    tempOn = int(settings.get('tempOn', 50))
+    tempOff = int(settings.get('tempOff', 40))
     mode = settings['mode']
     
     controlPin = 14
@@ -89,9 +90,13 @@ try:
 
     while True:
         settings = read_json("settings.json")
-        tempOn = int(settings['tempOn'])
-        tempOff = int(settings['tempOff'])
+        tempOn = int(settings.get('tempOn', 50))
+        tempOff = int(settings.get('tempOff', 40))
         mode = settings['mode']
+
+        backlight_time_1 = settings.get('backlight_time_1', '7:00')
+        backlight_time_2 = settings.get('backlight_time_2', '22:00')
+        backlight_mode = settings.get('backlight_mode', 'on')
 
         temp = get_temp()
         pulse_count = 0
@@ -114,7 +119,7 @@ try:
         write_current_data(temp, pinState, rpm)
         
         if has_lcd:
-            set_backlight_by_time()
+            set_backlight_by_time(backlight_time_1, backlight_time_2, backlight_mode)
             
             if abs(temp - prev_temp) >= 0.1:
                 update_lcd_cell(lcd, 0, 5, f'{temp:4.1f}')

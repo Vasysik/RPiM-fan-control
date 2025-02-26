@@ -13,8 +13,15 @@
     font-weight: 500;
 }
 
+.settings-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 20px;
+    padding: 20px;
+}
+
 .fan-control-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: var(--bg-secondary);
@@ -29,12 +36,12 @@
 }
 
 .status-section {
-    flex: 1.8;
+    flex: 1.2;
     margin-right: 10px;
 }
 
 .settings-section {
-    flex: 1.2;
+    flex: 1.8;
     margin-left: 10px;
 }
 
@@ -87,6 +94,13 @@
         flex: 1;
         margin-left: 0px;
     }
+
+    .settings-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
 }
 
 input[type="number"], select {
@@ -99,7 +113,7 @@ input[type="number"] {
     width: 6ch;
 }
 
-button, .graph-type, .time-range {
+button, .graph-type, .time-range, input {
     padding: 12px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
