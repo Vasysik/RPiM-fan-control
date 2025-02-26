@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import sys, traceback, json
 from time import sleep
 from re import findall
+from datetime import datetime
 from subprocess import check_output
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -22,15 +23,17 @@ def read_json(file_path):
     with open(file_path, 'r') as f:
         return json.load(f)
     
-def update_lcd(lcd, temp, pinState, rpm, mode):
-    lcd.clear()
+def update_lcd_cell(lcd, row, col, text):
+    lcd.cursor_pos = (row, col)
+    lcd.write_string(text)
+
+def set_backlight_by_time():
+    current_hour = datetime.now().hour
     
-    lcd.cursor_pos = (0, 0)
-    fan_state = 'ON ' if pinState else 'OFF'
-    lcd.write_string(f'Temp:{temp:4.1f} Fan:{fan_state}')
-    
-    lcd.cursor_pos = (1, 0)
-    lcd.write_string(f'RPM:{rpm:4.0f} {mode:>6}')
+    if 7 <= current_hour < 22:
+        lcd.backlight_enabled = True
+    else:
+        lcd.backlight_enabled = False
 
 config = read_json("config.json")
 influxdb_config = read_json(config['influxdb_config_path'])
@@ -46,7 +49,7 @@ has_lcd = True
 try:
     lcd = CharLCD('PCF8574', 0x27)
     lcd.clear()
-    lcd.backlight_enabled = False
+    lcd.backlight_enabled = True
     lcd.write_string('Fan Control')
     lcd.cursor_pos = (1, 0)
     lcd.write_string('Starting...')
@@ -67,10 +70,22 @@ try:
     pulse_count = 0
     rpm = float(0)
     
+    prev_temp = 0
+    prev_fan_state = None
+    prev_rpm = -1
+    prev_mode = ""
+    
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(controlPin, GPIO.OUT, initial=0)
     GPIO.setup(tachPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(tachPin, GPIO.FALLING, callback=count_pulse)
+
+    if has_lcd:
+        lcd.clear()
+        lcd.cursor_pos = (0, 0)
+        lcd.write_string(f'Temp:     Fan:   ')
+        lcd.cursor_pos = (1, 0)
+        lcd.write_string(f'RPM:          ')
 
     while True:
         settings = read_json("settings.json")
@@ -97,12 +112,31 @@ try:
             GPIO.output(controlPin, pinState)
 
         write_current_data(temp, pinState, rpm)
-        if has_lcd: update_lcd(lcd, temp, pinState, rpm, mode)
+        
+        if has_lcd:
+            set_backlight_by_time()
+            
+            if abs(temp - prev_temp) >= 0.1:
+                update_lcd_cell(lcd, 0, 5, f'{temp:4.1f}')
+                prev_temp = temp
+
+            fan_state_text = 'ON ' if pinState else 'OFF'
+            if prev_fan_state != pinState:
+                update_lcd_cell(lcd, 0, 14, fan_state_text)
+                prev_fan_state = pinState
+            
+            if abs(rpm - prev_rpm) >= 1:
+                update_lcd_cell(lcd, 1, 4, f'{rpm:4.0f}')
+                prev_rpm = rpm
+            
+            if prev_mode != mode:
+                update_lcd_cell(lcd, 1, 9, f'{mode:>6}')
+                prev_mode = mode
+        
         print(f"Temperature: {temp}°C, Fan State: {'On' if pinState else 'Off'}, RPM: {rpm}, Mode: {mode}, TempOn: {tempOn}, TempOff: {tempOff}")
         sleep(1)
         rpm = (pulse_count / 2) * (60 / interval)
         
-
 except KeyboardInterrupt:
     print("Exit pressed Ctrl+C")
 except Exception as e:
