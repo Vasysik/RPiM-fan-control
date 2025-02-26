@@ -62,6 +62,9 @@ function loadSettings() {
             document.getElementById('tempOn').value = settings.tempOn;
             document.getElementById('tempOff').value = settings.tempOff;
             document.getElementById('mode').value = settings.mode;
+            document.getElementById('backlight_time_1').value = settings.backlight_time_1 || "07:00";
+            document.getElementById('backlight_time_2').value = settings.backlight_time_2 || "22:00";
+            document.getElementById('backlight_mode').value = settings.backlight_mode;
         })
         .catch(error => console.error('Error:', error));
 }
@@ -70,7 +73,10 @@ function saveSettings() {
     const settings = {
         tempOn: document.getElementById('tempOn').value,
         tempOff: document.getElementById('tempOff').value,
-        mode: document.getElementById('mode').value
+        mode: document.getElementById('mode').value,
+        backlight_time_1: document.getElementById('backlight_time_1').value,
+        backlight_time_2: document.getElementById('backlight_time_2').value,
+        backlight_mode: document.getElementById('backlight_mode').value
     };
 
     fetch('/fan_control/api/settings', {
@@ -179,7 +185,6 @@ function updateGraph() {
         .catch(error => console.error('Error:', error));
 }
 
-// Добавим функцию для обновления темы графика
 function updateGraphTheme() {
     const graphDiv = document.getElementById('graph');
     if (graphDiv && graphDiv.data && graphDiv.layout) {
@@ -194,7 +199,6 @@ function updateGraphTheme() {
     }
 }
 
-// Добавим слушатель изменения темы
 if (window.matchMedia) {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addListener(updateGraphTheme);

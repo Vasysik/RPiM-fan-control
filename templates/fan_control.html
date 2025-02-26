@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fan Control</title>
-    <script src="{{ url_for('fan_control.static', filename='fan_control.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('fan_control.static', filename='fan_control.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('fan_control.static', filename='fan_control_icon.png') }}">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fan Control</title>
+  <script src="{{ url_for('fan_control.static', filename='fan_control.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('fan_control.static', filename='fan_control.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('fan_control.static', filename='fan_control_icon.png') }}">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     {% extends "base_layout.html" %} 
@@ -42,24 +42,45 @@
 
             <div class="settings-section">
                 <h2 class="section-title">Settings</h2>
-                
-                <div class="status-item">
-                    <span class="status-label" for="tempOn">Temperature On:</span>
-                    <input class="status-value" type="number" id="tempOn" name="tempOn">
+                <div class="settings-container">
+                    <div class="settings-column">
+                        <div class="status-item">
+                            <span class="status-label" for="tempOn">Temperature On:</span>
+                            <input class="status-value" type="number" id="tempOn" name="tempOn">
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label" for="tempOff">Temperature Off:</span>
+                            <input class="status-value" type="number" id="tempOff" name="tempOff">
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label" for="mode">Mode:</span>
+                            <select class="status-value" id="mode" name="mode">
+                                <option value="smart">Smart</option>
+                                <option value="normal">Normal</option>
+                                <option value="default">Default</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-column">
+                        <div class="status-item">
+                            <span class="status-label" for="backlight_time_1">Backlight Start Time:</span>
+                            <input class="status-value" type="time" id="backlight_time_1" name="backlight_time_1" value="07:00">
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label" for="backlight_time_2">Backlight End Time:</span>
+                            <input class="status-value" type="time" id="backlight_time_2" name="backlight_time_2" value="22:00">
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label" for="backlight_mode">Backlight Mode:</span>
+                            <select class="status-value" id="backlight_mode" name="backlight_mode">
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="on">On</option>
+                                <option value="off">Off</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="status-item">
-                    <span class="status-label" for="tempOff">Temperature Off:</span>
-                    <input class="status-value" type="number" id="tempOff" name="tempOff">
-                </div>
-                <div class="status-item">
-                    <span class="status-label" for="mode">Mode:</span>
-                    <select class="status-value" id="mode" name="mode">
-                        <option value="smart">Smart</option>
-                        <option value="normal">Normal</option>
-                        <option value="default">Default</option>
-                    </select>
-                </div>
-                
                 <button onclick="saveSettings()">Save Settings</button>
             </div>
         </div>
