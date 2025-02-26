@@ -5,6 +5,7 @@ from re import findall
 from subprocess import check_output
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
+from RPLCD.i2c import CharLCD
 
 interval = 1
 
@@ -20,6 +21,16 @@ def count_pulse(channel):
 def read_json(file_path):
     with open(file_path, 'r') as f:
         return json.load(f)
+    
+def update_lcd(lcd, temp, pinState, rpm, mode):
+    lcd.clear()
+    
+    lcd.cursor_pos = (0, 0)
+    fan_state = 'ON ' if pinState else 'OFF'
+    lcd.write_string(f'Temp:{temp:4.1f} Fan:{fan_state}')
+    
+    lcd.cursor_pos = (1, 0)
+    lcd.write_string(f'RPM:{rpm:4.0f} {mode:>6}')
 
 config = read_json("config.json")
 influxdb_config = read_json(config['influxdb_config_path'])
@@ -30,6 +41,18 @@ def write_current_data(temp, pinState, rpm):
     fan_state = 1 if pinState else 0
     point = Point("fan_status").tag("location", "raspberry_pi").field("temperature", temp).field("fan_state", fan_state).field("rpm", rpm)
     write_api.write(bucket=config['influxdb_bucket'], org=config['influxdb_org'], record=point)
+
+has_lcd = True
+try:
+    lcd = CharLCD('PCF8574', 0x27)
+    lcd.clear()
+    lcd.backlight_enabled = False
+    lcd.write_string('Fan Control')
+    lcd.cursor_pos = (1, 0)
+    lcd.write_string('Starting...')
+    sleep(2)
+except:
+    has_lcd = False
 
 try:
     settings = read_json("settings.json")
@@ -74,6 +97,7 @@ try:
             GPIO.output(controlPin, pinState)
 
         write_current_data(temp, pinState, rpm)
+        if has_lcd: update_lcd(lcd, temp, pinState, rpm, mode)
         print(f"Temperature: {temp}°C, Fan State: {'On' if pinState else 'Off'}, RPM: {rpm}, Mode: {mode}, TempOn: {tempOn}, TempOff: {tempOff}")
         sleep(1)
         rpm = (pulse_count / 2) * (60 / interval)
@@ -88,5 +112,10 @@ except Exception as e:
     print("--- End Exception Data:")
 finally:
     print("CleanUp")
+    if 'lcd' in locals() and has_lcd:
+        lcd.clear()
+        lcd.write_string('Shutting down...')
+        sleep(1)
+        lcd.clear()
     GPIO.cleanup()
     print("End of program")
